@@ -39,7 +39,7 @@ public class CustomPromise {
     }
 
     public void reject(Exception e) {
-        Log.e("custom-promise-reject",e.getMessage());
+        Log.e("custom-promise-reject","error:"+e.getMessage());
 
         if (!this.deferredObject.isRejected()) {
             this.deferredObject.reject(e);

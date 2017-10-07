@@ -158,7 +158,7 @@ public class CommsLayer {
         };
     }
 
-
+    //return ArrayList of projects
     public CustomPromise getProjects() {
         return new CustomPromise() {
             @Override
@@ -176,18 +176,14 @@ public class CommsLayer {
                                 JSONObject jsonResult = (JSONObject) result;
 
                                 if(jsonResult.has("STATUS") && jsonResult.get("STATUS").toString().toLowerCase().equals("ok")){
-                                    ArrayList<Project> projects = new ArrayList<Project>();
+                                    ArrayList<Project> projects = new ArrayList<>();
                                     if(jsonResult.has("projects")){
                                         JSONArray jsonProjects = jsonResult.getJSONArray("projects");
                                         Type t = new TypeToken<ArrayList<Project>>(){}.getType();
                                         projects= new Gson().fromJson(jsonProjects.toString(), t);
 
-
                                     }
                                     resolve(projects);
-
-
-
                                 }else
                                 {
                                     Log.e("getProject",result.toString());

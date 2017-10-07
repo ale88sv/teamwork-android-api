@@ -11,4 +11,24 @@ public class Project {
     private String description;
     private String logo;
     private String status;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public String getStatus() {
+        return status;
+    }
 }
