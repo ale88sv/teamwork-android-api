@@ -19,13 +19,20 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.vegna.teamwork.android.teamwork.classes.Project;
 
 import org.jdeferred.DoneCallback;
 import org.jdeferred.FailCallback;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,21 +46,21 @@ public class CommsLayer {
     private static final String PASSWORD = "yatyatyat27";
 
     private static CommsLayer commsLayer;
-    private Context context;
     private RequestQueue queue;
-    private String clientId, serverUrl, clientSecret, accessToken, basicToken;
+    private String basicToken;
 
 
-    public static CommsLayer getComms() {
+    public static CommsLayer getComms(Context c) {
         if (commsLayer == null) {
             commsLayer = new CommsLayer();
-            commsLayer.init();
+            commsLayer.init(c);
         }
 
         return commsLayer;
     }
 
-    private void init() {
+    private void init(Context c) {
+        queue = Volley.newRequestQueue(c);
         basicToken = createBasicToken();
     }
 
@@ -66,11 +73,11 @@ public class CommsLayer {
         return makeRequestForPath(endPoint, params, accessToken);
     }
 
-    public CustomPromise makeRequestForPath(final String endPoint, final JSONObject params) {
+    private CustomPromise makeRequestForPath(final String endPoint, final JSONObject params) {
         return makeRequestForPath(endPoint, params, null);
     }
 
-    public CustomPromise makeRequestForPath(final String endPoint, final JSONObject params, final String accessToken) {
+    private CustomPromise makeRequestForPath(final String endPoint, final JSONObject params, final String accessToken) {
         return new CustomPromise() {
             @Override
             public void execute() {
@@ -89,8 +96,12 @@ public class CommsLayer {
                             if (response.has("HttpStatusCode") && response.getInt("HttpStatusCode") != 200) {
                                 reject(new CustomException("We are having difficulty processing your request. Please try again later."));
                             } else {
-                                resolve(response);
+                                if(response.has("data"))
+                                    resolve(new JSONObject(response.getString("data")));
+                                else
+                                    reject(new CustomException("no data"));
                             }
+
                         } catch (JSONException e) {
                             reject(new CustomException(e));
                         }
@@ -148,7 +159,7 @@ public class CommsLayer {
     }
 
 
-    public CustomPromise getProgects() {
+    public CustomPromise getProjects() {
         return new CustomPromise() {
             @Override
             public void execute() {
@@ -156,7 +167,38 @@ public class CommsLayer {
                 makeRequestForPath(GET_PROJECTS, null).then(new DoneCallback() {
                     @Override
                     public void onDone(Object result) {
-                        resolve(null);
+                        try {
+
+                            if(result == null){
+                                resolve(null);
+                            }else{
+
+                                JSONObject jsonResult = (JSONObject) result;
+
+                                if(jsonResult.has("STATUS") && jsonResult.get("STATUS").toString().toLowerCase().equals("ok")){
+                                    ArrayList<Project> projects = new ArrayList<Project>();
+                                    if(jsonResult.has("projects")){
+                                        JSONArray jsonProjects = jsonResult.getJSONArray("projects");
+                                        Type t = new TypeToken<ArrayList<Project>>(){}.getType();
+                                        projects= new Gson().fromJson(jsonProjects.toString(), t);
+
+
+                                    }
+                                    resolve(projects);
+
+
+
+                                }else
+                                {
+                                    Log.e("getProject",result.toString());
+                                    resolve(null);
+                                }
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            reject(e);
+                        }
                     }
                 }).fail(new FailCallback() {
                     @Override
