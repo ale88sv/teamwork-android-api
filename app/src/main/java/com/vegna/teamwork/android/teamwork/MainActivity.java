@@ -1,6 +1,5 @@
 package com.vegna.teamwork.android.teamwork;
 
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -33,15 +32,5 @@ public class MainActivity extends AppCompatActivity {
         Utils.addFragment(getSupportFragmentManager().beginTransaction(),new ProjectList());
     }
 
-    @Override
-    public void onBackPressed() {
-        // note: you can also use 'getSupportFragmentManager()'
-        FragmentManager mgr = getFragmentManager();
-        if (mgr.getBackStackEntryCount() == 0) {
-            // No backstack to pop, so calling super
-            super.onBackPressed();
-        } else {
-            mgr.popBackStack();
-        }
-    }
+
 }

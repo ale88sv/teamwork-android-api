@@ -23,6 +23,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vegna.teamwork.android.teamwork.classes.Project;
+import com.vegna.teamwork.android.teamwork.classes.Task;
 
 import org.jdeferred.DoneCallback;
 import org.jdeferred.FailCallback;
@@ -43,6 +44,7 @@ public class CommsLayer {
     private static final String BASE_URL = "https://yat.teamwork.com";
     private static final String GET_PROJECTS = "/projects.json";
     private static final String GET_PROJECT = "/projects/%d.json";
+    private static final String GET_PROJECT_TASK_LIST = "/projects/%d/tasklists.json";
     private static final String USERNAME = "yat@triplespin.com";
     private static final String PASSWORD = "yatyatyat27";
 
@@ -94,7 +96,7 @@ public class CommsLayer {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            if (response.has("HttpStatusCode") && response.getInt("HttpStatusCode") != 200) {
+                            if (response.has("HttpStatusCode") && response.getInt("HttpStatusCode") != 200 && response.getInt("HttpStatusCode") != 304) {
                                 reject(new CustomException("We are having difficulty processing your request. Please try again later."));
                             } else {
                                 if(response.has("data"))
@@ -152,7 +154,7 @@ public class CommsLayer {
                 };
                 //Set a retry policy in case of SocketTimeout & ConnectionTimeout Exceptions.
                 //Volley does retry for you if you have specified the policy.
-                jsonRequest.setRetryPolicy(new DefaultRetryPolicy(10000, 3, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                jsonRequest.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
                 queue.add(jsonRequest);
             }
@@ -208,7 +210,7 @@ public class CommsLayer {
         };
     }
 
-    //return ArrayList of projects
+    //return the Project
     public CustomPromise getProject(final int id) {
         return new CustomPromise() {
             @Override
@@ -225,16 +227,37 @@ public class CommsLayer {
                             }else{
 
                                 JSONObject jsonResult = (JSONObject) result;
+                                final Project project;
 
                                 if(jsonResult.has("STATUS") && jsonResult.get("STATUS").toString().toLowerCase().equals("ok")){
-                                    Project project = new Project();
                                     if(jsonResult.has("project")){
                                         JSONObject jsonProjects = jsonResult.getJSONObject("project");
                                         Type t = new TypeToken<Project>(){}.getType();
                                         project = new Gson().fromJson(jsonProjects.toString(), t);
 
+
+                                        getProjectTasks(id).then(new DoneCallback() {
+                                            @Override
+                                            public void onDone(Object result) {
+                                                if(result != null){
+                                                    ArrayList<Task> tasks = (ArrayList<Task>) result;
+                                                    project.setTasks(tasks);
+
+                                                    resolve(project);
+
+                                                }
+                                            }
+                                        }).fail(new FailCallback() {
+                                            @Override
+                                            public void onFail(Object result) {
+                                                project.setTasks(new ArrayList<Task>());
+
+                                                resolve(project);
+                                            }
+                                        });
                                     }
-                                    resolve(project);
+
+
                                 }else
                                 {
                                     Log.e("getProject",result.toString());
@@ -258,6 +281,51 @@ public class CommsLayer {
         };
     }
 
+    //return the Project
+    public CustomPromise getProjectTasks(final int id) {
+        return new CustomPromise() {
+            @Override
+            public void execute() {
+
+                String path = String.format(GET_PROJECT_TASK_LIST,id);
+
+                makeRequestForPath(path, null).then(new DoneCallback() {
+                    @Override
+                    public void onDone(Object result) {
+                        try {
+
+                            JSONObject jsonResult = (JSONObject) result;
+
+                            if(jsonResult.has("STATUS") && jsonResult.get("STATUS").toString().toLowerCase().equals("ok")){
+                                ArrayList<Task> tasks = new ArrayList<>();
+                                if(jsonResult.has("tasklists")){
+                                    JSONArray jsonProjects = jsonResult.getJSONArray("tasklists");
+                                    Type t = new TypeToken<ArrayList<Task>>(){}.getType();
+                                    tasks= new Gson().fromJson(jsonProjects.toString(), t);
+
+                                }
+                                resolve(tasks);
+                            }else
+                            {
+                                Log.e("getTasks",result.toString());
+                                resolve(null);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            reject(e);
+                        }
+                    }
+                }).fail(new FailCallback() {
+                    @Override
+                    public void onFail(Object result) {
+                        CustomException e = (CustomException) result;
+                        reject(e);
+                    }
+                });
+            }
+        };
+    }
 
 
 

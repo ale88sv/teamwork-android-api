@@ -1,6 +1,7 @@
 package com.vegna.teamwork.android.teamwork.adapters;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -40,7 +41,12 @@ public class RVAdpater extends RecyclerView.Adapter<RVAdpater.ProjectViewHolder>
     public void onBindViewHolder(ProjectViewHolder projectViewHolder, int i) {
         projectViewHolder.status.setText(projects.get(i).getStatus());
         projectViewHolder.title.setText(projects.get(i).getName());
-        projectViewHolder.description.setText(projects.get(i).getDescription());
+
+        String desc = projects.get(i).getDescription();
+        //description is optional
+        if(desc != null)
+            projectViewHolder.description.setText(desc);
+
         //loading image
         if(!projects.get(i).getLogo().isEmpty()){
             Picasso.with(context).load(projects.get(i).getLogo()).error(android.R.drawable.stat_notify_error).placeholder(R.drawable.loading).into(projectViewHolder.logo);
@@ -89,6 +95,9 @@ public class RVAdpater extends RecyclerView.Adapter<RVAdpater.ProjectViewHolder>
         @Override
         public void onClick(View v) {
             Fragment fragment = new ProjectDescription();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("project",projects.get(getAdapterPosition()));
+            fragment.setArguments(bundle);
             Utils.swapFragments(fragment,projectListFragment);
             /*CommsLayer.getComms(v.getContext()).getProject(projects.get(getAdapterPosition()).getId()).then(new DoneCallback() {
                 @Override

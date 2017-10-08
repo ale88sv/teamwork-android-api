@@ -10,45 +10,20 @@
         android:layout_gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="4dp"
-        android:layout_marginBottom="10dp"
         card_view:cardPreventCornerOverlap="true"
-        android:layout_margin="10dp"
-        card_view:cardElevation="5dp">
+        android:layout_margin="10dp">
 
         <RelativeLayout
             android:id="@+id/relative"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-            <ImageView
-                android:id="@+id/logo"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true"
-                android:padding="10dp"
-                android:src="@drawable/placeholder" />
-
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:background="@color/colorAccent"
-                android:layout_alignParentEnd="true"
-                android:textSize="12sp"
-                android:padding="5dp"
-                android:textAllCaps="true"/>
+            android:layout_height="fill_parent"
+            android:padding="10dp">
 
             <TextView
                 android:id="@+id/title"
                 style="@style/cart_title"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="10dp"
-                android:paddingStart="0dp"
-                android:paddingEnd="50dp"
-                android:layout_toEndOf="@+id/logo" />
+                android:layout_marginTop="10dp"/>
 
             <TextView
                 android:id="@+id/description"
@@ -58,8 +33,6 @@
                 android:layout_marginTop="10dp"
                 android:layout_below="@+id/title"
                 android:layout_alignStart="@+id/title"
-                android:maxLines = "5"
-                android:layout_toStartOf="@+id/status"
                 android:paddingBottom="10dp"/>
 
 

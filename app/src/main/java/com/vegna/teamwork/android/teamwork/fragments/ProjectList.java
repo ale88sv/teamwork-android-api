@@ -112,8 +112,6 @@ public class ProjectList extends Fragment {
                 projects.clear();
                 checkResults();
 
-
-
             }
         });
     }

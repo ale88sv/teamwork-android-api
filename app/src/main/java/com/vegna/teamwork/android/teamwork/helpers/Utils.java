@@ -13,6 +13,7 @@ public class Utils {
 
     public static void swapFragments(Fragment newFragment, Fragment oldFragment){
         FragmentTransaction transaction =  oldFragment.getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_left,R.anim.enter_from_left, R.anim.exit_to_left);
         transaction.replace(R.id.fragment_container, newFragment);
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.addToBackStack(null);
@@ -22,7 +23,6 @@ public class Utils {
     public static void addFragment(FragmentTransaction transaction, Fragment newFragment){
         transaction.add(R.id.fragment_container, newFragment);
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 
