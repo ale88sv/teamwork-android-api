@@ -10,27 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d0077426-875e-4390-91db-58bc7a072f20" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/adapters/RvTasksAdpater.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/classes/Task.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/anim/enter_from_left.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/anim/enter_from_right.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/anim/exit_to_left.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/anim/exit_to_right.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/card_for_details.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/cards_task.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/adapters/RVAdpater.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/adapters/RVAdpater.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/classes/Project.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/classes/Project.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/fragments/ProjectDescription.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/fragments/ProjectDescription.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/fragments/ProjectList.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/fragments/ProjectList.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/helpers/CommsLayer.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/helpers/CommsLayer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/helpers/Utils.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/helpers/Utils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/cards.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/cards.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_project_description.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_project_description.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
     </list>
     <ignored path="Teamwork.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -98,7 +78,19 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Project.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CommsLayer.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/helpers/CommsLayer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="392">
+              <caret line="345" column="47" selection-start-line="345" selection-start-column="47" selection-end-line="345" selection-end-column="47" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Project.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/classes/Project.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="563">
@@ -122,16 +114,6 @@
                 <element signature="e#488#513#0" expanded="true" />
                 <element signature="e#650#665#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="colors.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="72">
-              <caret line="4" column="37" selection-start-line="4" selection-start-column="37" selection-end-line="4" selection-end-column="37" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -2087,7 +2069,6 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/classes/Tasks.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/classes/Task.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/adapters/RVAdpater.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/helpers/CommsLayer.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/fragments/ProjectList.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/anim/exit_from_left.xml" />
@@ -2106,6 +2087,7 @@
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/adapters/RvTasksAdpater.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/classes/Project.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/helpers/CommsLayer.java" />
       </list>
     </option>
   </component>
@@ -2954,7 +2936,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/helpers/CommsLayer.java</url>
-          <line>114</line>
+          <line>115</line>
           <properties />
           <option name="timeStamp" value="4" />
         </line-breakpoint>
@@ -2966,7 +2948,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/helpers/CommsLayer.java</url>
-          <line>241</line>
+          <line>242</line>
           <properties />
           <option name="timeStamp" value="19" />
         </line-breakpoint>
@@ -2978,7 +2960,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/helpers/CommsLayer.java</url>
-          <line>296</line>
+          <line>297</line>
           <properties />
           <option name="timeStamp" value="24" />
         </line-breakpoint>
@@ -3280,16 +3262,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/helpers/CommsLayer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="296" column="0" selection-start-line="296" selection-start-column="0" selection-end-line="296" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/adapters/RVAdpater.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
@@ -3454,6 +3426,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="563">
           <caret line="42" column="27" selection-start-line="42" selection-start-column="27" selection-end-line="42" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/vegna/teamwork/android/teamwork/helpers/CommsLayer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="392">
+          <caret line="345" column="47" selection-start-line="345" selection-start-column="47" selection-end-line="345" selection-end-column="47" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

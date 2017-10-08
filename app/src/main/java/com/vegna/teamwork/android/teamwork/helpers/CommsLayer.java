@@ -45,6 +45,7 @@ public class CommsLayer {
     private static final String GET_PROJECTS = "/projects.json";
     private static final String GET_PROJECT = "/projects/%d.json";
     private static final String GET_PROJECT_TASK_LIST = "/projects/%d/tasklists.json";
+    private static final String ADD_TASKS_TO_TASK_LIST = "/tasklists/%d/quickadd.json";
     private static final String USERNAME = "yat@triplespin.com";
     private static final String PASSWORD = "yatyatyat27";
 
@@ -309,6 +310,52 @@ public class CommsLayer {
                             {
                                 Log.e("getTasks",result.toString());
                                 resolve(null);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            reject(e);
+                        }
+                    }
+                }).fail(new FailCallback() {
+                    @Override
+                    public void onFail(Object result) {
+                        CustomException e = (CustomException) result;
+                        reject(e);
+                    }
+                });
+            }
+        };
+    }
+
+    //add list of tasks into a tasklist
+    public CustomPromise addTaskToTasklist(final int taskListID,final String content) {
+        return new CustomPromise() {
+            @Override
+            public void execute() {
+
+                String path = String.format(ADD_TASKS_TO_TASK_LIST,taskListID);
+                JSONObject params = new JSONObject();
+
+                try {
+                    params.put("content",content);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                makeRequestForPath(path, params).then(new DoneCallback() {
+                    @Override
+                    public void onDone(Object result) {
+                        try {
+
+                            JSONObject jsonResult = (JSONObject) result;
+
+                            if(jsonResult.has("STATUS") && jsonResult.get("STATUS").toString().toLowerCase().equals("ok")){
+                                resolve(true);
+                            }else
+                            {
+                                Log.e("addTasks",result.toString());
+                                resolve(false);
                             }
 
                         } catch (JSONException e) {
