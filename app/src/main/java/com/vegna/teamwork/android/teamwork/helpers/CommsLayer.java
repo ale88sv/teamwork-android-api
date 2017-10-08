@@ -42,6 +42,7 @@ public class CommsLayer {
     private static final String API_TOKEN = "twp_TEbBXGCnvl2HfvXWfkLUlzx92e3T";
     private static final String BASE_URL = "https://yat.teamwork.com";
     private static final String GET_PROJECTS = "/projects.json";
+    private static final String GET_PROJECT = "/projects/%d.json";
     private static final String USERNAME = "yat@triplespin.com";
     private static final String PASSWORD = "yatyatyat27";
 
@@ -186,6 +187,56 @@ public class CommsLayer {
                                     resolve(projects);
                                 }else
                                 {
+                                    Log.e("getProjectss",result.toString());
+                                    resolve(null);
+                                }
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            reject(e);
+                        }
+                    }
+                }).fail(new FailCallback() {
+                    @Override
+                    public void onFail(Object result) {
+                        CustomException e = (CustomException) result;
+                        reject(e);
+                    }
+                });
+            }
+        };
+    }
+
+    //return ArrayList of projects
+    public CustomPromise getProject(final int id) {
+        return new CustomPromise() {
+            @Override
+            public void execute() {
+
+                String path = String.format(GET_PROJECT,id);
+                makeRequestForPath(path, null).then(new DoneCallback() {
+                    @Override
+                    public void onDone(Object result) {
+                        try {
+
+                            if(result == null){
+                                resolve(null);
+                            }else{
+
+                                JSONObject jsonResult = (JSONObject) result;
+
+                                if(jsonResult.has("STATUS") && jsonResult.get("STATUS").toString().toLowerCase().equals("ok")){
+                                    Project project = new Project();
+                                    if(jsonResult.has("project")){
+                                        JSONObject jsonProjects = jsonResult.getJSONObject("project");
+                                        Type t = new TypeToken<Project>(){}.getType();
+                                        project = new Gson().fromJson(jsonProjects.toString(), t);
+
+                                    }
+                                    resolve(project);
+                                }else
+                                {
                                     Log.e("getProject",result.toString());
                                     resolve(null);
                                 }
@@ -206,6 +257,8 @@ public class CommsLayer {
             }
         };
     }
+
+
 
 
     public static boolean isOnline(Context context) {
