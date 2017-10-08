@@ -5,6 +5,8 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.vegna.teamwork.android.teamwork.R;
 
+import java.util.ArrayList;
+
 /**
  * Created by ale on 10/8/17.
  */
@@ -24,6 +26,16 @@ public class Utils {
         transaction.add(R.id.fragment_container, newFragment);
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.commit();
+    }
+
+    public static String generateTasksForParams(ArrayList<String> tasks){
+        String content = "";
+        for (String task : tasks){
+            if(!task.isEmpty())
+                content += task+"\n";
+        }
+
+        return content;
     }
 
 

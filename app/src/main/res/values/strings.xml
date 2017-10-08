@@ -5,4 +5,6 @@
     <string name="project_details">Project Details</string>
     <string name="tasks">Project Tasks</string>
     <string name="no_description">No description</string>
+    <string name="task_alert_title">Task</string>
+    <string name="task_alert_desc">Insert the description of the task</string>
 </resources>

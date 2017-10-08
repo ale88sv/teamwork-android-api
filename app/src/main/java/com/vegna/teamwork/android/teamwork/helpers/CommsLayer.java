@@ -126,12 +126,8 @@ public class CommsLayer {
                     @Override
                     public Map<String, String> getHeaders() {
                         HashMap<String, String> headers = new HashMap<String, String>();
-                        headers.put("Content-Type", "application/json");
-                        if (accessToken != null) //bearer
-                            headers.put("Authorization", "Bearer " + accessToken);
-                        else {
-                            headers.put("Authorization", "Basic " + basicToken);
-                        }
+                        headers.put("Content-Type", "application/json; charset=utf-8");
+                        headers.put("Authorization", "Basic " + basicToken);
 
                         return headers;
                     }
@@ -155,7 +151,7 @@ public class CommsLayer {
                 };
                 //Set a retry policy in case of SocketTimeout & ConnectionTimeout Exceptions.
                 //Volley does retry for you if you have specified the policy.
-                jsonRequest.setRetryPolicy(new DefaultRetryPolicy(10000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                jsonRequest.setRetryPolicy(new DefaultRetryPolicy(10000, 3, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
                 queue.add(jsonRequest);
             }
