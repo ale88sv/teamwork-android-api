@@ -1,6 +1,7 @@
 package com.vegna.teamwork.android.teamwork.adapters;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,6 +14,9 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.vegna.teamwork.android.teamwork.R;
 import com.vegna.teamwork.android.teamwork.classes.Project;
+import com.vegna.teamwork.android.teamwork.fragments.ProjectDescription;
+import com.vegna.teamwork.android.teamwork.fragments.ProjectList;
+import com.vegna.teamwork.android.teamwork.helpers.Utils;
 
 import java.util.List;
 
@@ -23,11 +27,13 @@ import java.util.List;
 public class RVAdpater extends RecyclerView.Adapter<RVAdpater.ProjectViewHolder>{
     private List<Project> projects;
     private Context context;
+    private ProjectList projectListFragment;
 
 
-    public RVAdpater(List<Project> projects,Context context){
+    public RVAdpater(List<Project> projects,Context context,ProjectList projectList){
         this.projects = projects;
         this.context = context;
+        this.projectListFragment = projectList;
     }
 
     @Override
@@ -54,7 +60,7 @@ public class RVAdpater extends RecyclerView.Adapter<RVAdpater.ProjectViewHolder>
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    class ProjectViewHolder extends RecyclerView.ViewHolder {
+    class ProjectViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener  {
         CardView cv;
         private TextView status;
         private TextView title;
@@ -73,8 +79,33 @@ public class RVAdpater extends RecyclerView.Adapter<RVAdpater.ProjectViewHolder>
             //add ellipsize at the end if the text is to long
             description.setEllipsize(TextUtils.TruncateAt.END);
 
+            itemView.setOnClickListener(this);
 
 
+
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            Fragment fragment = new ProjectDescription();
+            Utils.swapFragments(fragment,projectListFragment);
+            /*CommsLayer.getComms(v.getContext()).getProject(projects.get(getAdapterPosition()).getId()).then(new DoneCallback() {
+                @Override
+                public void onDone(Object result) {
+
+                    Fragment fragment = new ProjectDescription();
+                    Bundle args = new Bundle();
+                    args.putString("data", "This data has sent to FragmentTwo");
+                    fragment.setArguments(args);
+                    FragmentTransaction transaction =     projectListFragment.getActivity().getSupportFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment, fragment);
+                    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+
+                }
+            });*/
         }
     }
 
