@@ -1,5 +1,6 @@
 package com.vegna.teamwork.android.teamwork.fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,7 @@ import org.jdeferred.FailCallback;
 
 import java.util.ArrayList;
 
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -35,6 +39,9 @@ public class ProjectList extends Fragment {
     private Context context;
     private RecyclerView rv;
     private TextView noResultsView;
+    private Boolean firstTime;
+    //deprecated in Android O
+    private ProgressDialog progress;
 
     @Override
     public void onAttach(Context context) {
@@ -42,6 +49,13 @@ public class ProjectList extends Fragment {
 
         //need to instantiate here otherwise I will lose the reference when I click on back button
         projects = new ArrayList<>();
+        firstTime = true;
+        progress = new ProgressDialog(context);
+        progress.setTitle(getString(R.string.loading));
+        progress.setMessage(getString(R.string.loading_text));
+        progress.setCancelable(false);
+        progress.show();
+
 
     }
 
@@ -53,13 +67,10 @@ public class ProjectList extends Fragment {
         context =  v.getContext();
         commsLayer = CommsLayer.getComms(context);
 
-
-
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_layout);
 
-        rv = (RecyclerView)v.findViewById(R.id.rv);
+        rv = (RecyclerView) v.findViewById(R.id.rv);
         noResultsView = (TextView) v.findViewById(R.id.no_results);
-        rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(v.getContext());
         rv.setLayoutManager(llm);
 
@@ -75,23 +86,34 @@ public class ProjectList extends Fragment {
         });
 
 
-        getProjects();
+        //check for new projects only the fist time
+        if(firstTime){
+            getProjects();
+            firstTime = false;
+        }
 
         return v;
     }
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        checkResults();
+        //checkResults();
     }
 
     private void getProjects(){
+        progress.show();
+
+        noResultsView.setVisibility(View.GONE);
+        rv.setVisibility(View.GONE);
+
         commsLayer.getProjects().then(new DoneCallback() {
             @Override
             public void onDone(Object result) {
@@ -127,6 +149,7 @@ public class ProjectList extends Fragment {
             noResultsView.setVisibility(View.GONE);
             rv.setVisibility(View.VISIBLE);
         }
+        progress.dismiss();
 
     }
 }

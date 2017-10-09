@@ -8,13 +8,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vegna.teamwork.android.teamwork.R;
 import com.vegna.teamwork.android.teamwork.activity.AddTasks;
 import com.vegna.teamwork.android.teamwork.classes.Task;
 import com.vegna.teamwork.android.teamwork.fragments.ProjectDescription;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,33 +25,26 @@ import java.util.List;
  * Created by alessandro on 05/10/2017.
  */
 
-public class RvTasksAdpater extends RecyclerView.Adapter<RvTasksAdpater.TaskViewHolder>{
-    private List<Task> tasks;
+public class RvAddTasksAdpater extends RecyclerView.Adapter<RvAddTasksAdpater.TaskViewHolder>{
+    private List<String> tasks;
     private Context context;
+    private AddTasks addTasks;
 
-    public RvTasksAdpater(List<Task> tasks, Context context){
+    public RvAddTasksAdpater(List<String> tasks, Context context,AddTasks addTasks){
         this.tasks = tasks;
         this.context = context;
-     }
-
-    @Override
-    public void onBindViewHolder(TaskViewHolder taskViewHolder, int i) {
-        taskViewHolder.title.setText(tasks.get(i).getName());
-        String desc = tasks.get(i).getDescription();
-        //description is optional
-        if(desc != null && !desc.isEmpty())
-            taskViewHolder.description.setText(desc);
-        else
-        {
-            taskViewHolder.description.setTypeface(null, Typeface.ITALIC);
-            taskViewHolder.description.setText(context.getString(R.string.no_description));
-        }
+        this.addTasks = addTasks;
 
     }
 
     @Override
+    public void onBindViewHolder(TaskViewHolder taskViewHolder, int i) {
+        taskViewHolder.title.setText(tasks.get(i));
+    }
+
+    @Override
     public TaskViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cards_task, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cards_task_insert, viewGroup, false);
         TaskViewHolder pvh = new TaskViewHolder(v);
         return pvh;
     }
@@ -62,22 +58,24 @@ public class RvTasksAdpater extends RecyclerView.Adapter<RvTasksAdpater.TaskView
     class TaskViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         private TextView title;
-        private TextView description;
+        private ImageView imageView;
 
 
         TaskViewHolder(View itemView) {
             super(itemView);
             cv = (CardView)itemView.findViewById(R.id.card_view);
-            title = (TextView)itemView.findViewById(R.id.title);
-            description = (TextView)itemView.findViewById(R.id.description);
+            title = (TextView)itemView.findViewById(R.id.text);
+            imageView = (ImageView) itemView.findViewById(R.id.delete);
+
 
             //cannot use implements View.OnClickListener due to a bug on the nestedview
-            cv.setOnClickListener(new View.OnClickListener() {
+            imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, AddTasks.class);
-                    intent.putExtra("task",tasks.get(getAdapterPosition()));
-                    context.startActivity(intent);
+                    tasks.remove(getAdapterPosition());
+                    notifyDataSetChanged();
+                    if(tasks.isEmpty())
+                        addTasks.showNoTasks();
                 }
             });
         }

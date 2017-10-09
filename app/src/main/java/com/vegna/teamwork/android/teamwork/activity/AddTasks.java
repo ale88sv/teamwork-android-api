@@ -1,16 +1,33 @@
 package com.vegna.teamwork.android.teamwork.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vegna.teamwork.android.teamwork.R;
+import com.vegna.teamwork.android.teamwork.adapters.RvAddTasksAdpater;
+import com.vegna.teamwork.android.teamwork.classes.Task;
 import com.vegna.teamwork.android.teamwork.helpers.CommsLayer;
 import com.vegna.teamwork.android.teamwork.helpers.Utils;
 
 import org.jdeferred.DoneCallback;
+import org.jdeferred.FailCallback;
 
 import java.util.ArrayList;
 
@@ -18,68 +35,161 @@ public class AddTasks extends AppCompatActivity {
 
     private ArrayList<String> tasks;
     private Context context;
+    private Task task;
+    private RvAddTasksAdpater adapter;
+    private RecyclerView rv;
+    //deprecated in Android O
+    private ProgressDialog progress;
+    private TextView noTasksView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_tasks);
 
-        context = getApplicationContext();
+        progress = new ProgressDialog(this);
+        progress.setTitle(getString(R.string.loading));
+        progress.setMessage(getString(R.string.loading_text));
+        progress.setCancelable(false);
 
+        context = getApplicationContext();
         tasks = new ArrayList<>();
-        tasks.add("task 1");
-        tasks.add("task 2");
-        tasks.add("task 3");
+
+
+        //getting the task from the fragment
+        task = (Task) getIntent().getSerializableExtra("task");
+
+        //setting the name of the tasklist
+        TextView test = (TextView) findViewById(R.id.tasklist_name);
+        test.setText(task.getName());
+
+
+        rv = (RecyclerView) findViewById(R.id.task_list);
+        noTasksView = (TextView) findViewById(R.id.no_tasks);
+        LinearLayoutManager llm = new LinearLayoutManager(getApplicationContext());
+        rv.setLayoutManager(llm);
+
+
+        adapter = new RvAddTasksAdpater(tasks,getApplicationContext(),this);
+        rv.setAdapter(adapter);
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                String content = Utils.generateTasksForParams(tasks);
-
-                //todo remove this
-                CommsLayer.getComms(context).addTaskToTasklist(958199,content).then(new DoneCallback() {
-                    @Override
-                    public void onDone(Object result) {
-
-                    }
-                });
-
-//                AlertDialog.Builder alert = new AlertDialog.Builder(AddTasks.this);
-//
-//                View viewInflated = LayoutInflater.from(AddTasks.this).inflate(R.layout.input_alert,(ViewGroup) findViewById(android.R.id.content));
-//                // Set up the input
-//                final EditText edittext = (EditText) viewInflated.findViewById(R.id.task_title);
-//                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-//
-//
-//                alert.setMessage(R.string.task_alert_title);
-//                alert.setTitle(R.string.task_alert_desc);
-//
-//                alert.setView(viewInflated);
-//
-//
-//                alert.setPositiveButton("Yes Option", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int whichButton) {
-//                        //OR
-//                        String YouEditTextValue = edittext.getText().toString();
-//                    }
-//                });
-//
-//                alert.setNegativeButton("No Option", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int whichButton) {
-//                        // what ever you want to do with No option.
-//                    }
-//                });
-//
-//
-//                alert.show();
+                //send the task to the APIs
+                saveTasks();
             }
         });
 
+        //enable back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
     }
 
+    private void saveTasks() {
+        showProgressBar();
 
+        final String content = Utils.generateTasksForParams(tasks);
+
+        CommsLayer.getComms(context).addTaskToTasklist(task.getTasklistID(),content).then(new DoneCallback() {
+            @Override
+            public void onDone(Object result) {
+
+                Toast.makeText(context,getString(R.string.task_added),Toast.LENGTH_SHORT).show();
+                dismissProgressBar();
+                finish();
+
+            }
+        }).fail(new FailCallback() {
+            @Override
+            public void onFail(Object result) {
+                Toast.makeText(context,getString(R.string.something_wrong),Toast.LENGTH_SHORT).show();
+                dismissProgressBar();
+            }
+        });
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.add_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.create_new:
+                showInputDialog();
+                return true;
+            case android.R.id.home:
+                // app icon in action bar clicked; goto parent activity.
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void showInputDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.add_task));
+        // I'm using fragment here so I'm using getView() to provide ViewGroup
+        // but you can provide here any other instance of ViewGroup from your Fragment / Activity
+        View viewInflated = LayoutInflater.from(context).inflate(R.layout.input_alert, (ViewGroup) findViewById(android.R.id.content), false);
+        // Set up the input
+        final EditText input = (EditText) viewInflated.findViewById(R.id.task_title);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        builder.setView(viewInflated);
+
+        // Set up the buttons
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                addTask(input.getText().toString());
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+
+
+    private void addTask(String single_task){
+        if(!single_task.isEmpty())
+        {
+            tasks.add(single_task);
+            adapter.notifyDataSetChanged();
+            noTasksView.setVisibility(View.GONE);
+            rv.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+    public void showProgressBar(){
+        progress.show();
+    }
+
+    public void dismissProgressBar(){
+        progress.dismiss();
+    }
+
+    public void showNoTasks() {
+        noTasksView.setVisibility(View.VISIBLE);
+        rv.setVisibility(View.GONE);
+    }
 }

@@ -8,12 +8,12 @@ import java.io.Serializable;
 
 public class Task implements Serializable {
 
-    private int projectid;
+    private int id;
     private String name;
     private String description;
 
-    public int getProjectid() {
-        return projectid;
+    public int getTasklistID() {
+        return id;
     }
 
     public String getName() {

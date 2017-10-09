@@ -1,5 +1,6 @@
 package com.vegna.teamwork.android.teamwork.helpers;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 
