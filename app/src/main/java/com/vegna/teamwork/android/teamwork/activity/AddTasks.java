@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,12 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vegna.teamwork.android.teamwork.R;
 import com.vegna.teamwork.android.teamwork.adapters.RvAddTasksAdpater;
 import com.vegna.teamwork.android.teamwork.classes.Task;
+import com.vegna.teamwork.android.teamwork.classes.Tasklist;
 import com.vegna.teamwork.android.teamwork.helpers.CommsLayer;
 import com.vegna.teamwork.android.teamwork.helpers.Utils;
 
@@ -33,15 +34,16 @@ import java.util.ArrayList;
 
 public class AddTasks extends AppCompatActivity {
 
-    private ArrayList<String> tasks;
+    private ArrayList<Task> tasks;
     private Context context;
-    private Task task;
+    private Tasklist tasklist;
     private RvAddTasksAdpater adapter;
     private RecyclerView rv;
     //deprecated in Android O
     private ProgressDialog progress;
     private TextView noTasksView;
-
+    private int counter = 0;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,14 +58,23 @@ public class AddTasks extends AppCompatActivity {
         context = getApplicationContext();
         tasks = new ArrayList<>();
 
+        progress = Utils.createProgressDialog(this);
+        progress.show();
 
-        //getting the task from the fragment
-        task = (Task) getIntent().getSerializableExtra("task");
+        //getting the tasklist from the fragment
+        tasklist = (Tasklist) getIntent().getSerializableExtra("tasklist");
 
         //setting the name of the tasklist
-        TextView test = (TextView) findViewById(R.id.tasklist_name);
-        test.setText(task.getName());
+        TextView name = (TextView) findViewById(R.id.tasklist_name);
+        name.setText(tasklist.getName());
+        //setting the description of the tasklist
+        TextView desc = (TextView) findViewById(R.id.tasklist_desc);
+        LinearLayout descContainer = (LinearLayout) findViewById(R.id.desc_container);
 
+        if(tasklist.getDescription().isEmpty())
+            descContainer.setVisibility(View.GONE);
+        else
+            desc.setText(tasklist.getDescription());
 
         rv = (RecyclerView) findViewById(R.id.task_list);
         noTasksView = (TextView) findViewById(R.id.no_tasks);
@@ -75,11 +86,11 @@ public class AddTasks extends AppCompatActivity {
         rv.setAdapter(adapter);
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //send the task to the APIs
+                //send the tasklist to the APIs
                 saveTasks();
             }
         });
@@ -88,6 +99,30 @@ public class AddTasks extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        CommsLayer.getComms(context).getTasklistTasks(tasklist.getTasklistID()).then(new DoneCallback() {
+            @Override
+            public void onDone(Object result) {
+                if(result != null){
+                    tasks.clear();
+                    tasks.addAll((ArrayList<Task>)result);
+                    adapter.notifyDataSetChanged();
+                    if(tasks.size() > 0)
+                        showTasks();
+                    else
+                        showNoTasks();
+                }
+
+                progress.dismiss();
+
+            }
+        }).fail(new FailCallback() {
+            @Override
+            public void onFail(Object result) {
+                Toast.makeText(context,getString(R.string.something_wrong),Toast.LENGTH_LONG).show();
+                progress.dismiss();
+            }
+        });
+
     }
 
     private void saveTasks() {
@@ -95,7 +130,7 @@ public class AddTasks extends AppCompatActivity {
 
         final String content = Utils.generateTasksForParams(tasks);
 
-        CommsLayer.getComms(context).addTaskToTasklist(task.getTasklistID(),content).then(new DoneCallback() {
+        CommsLayer.getComms(context).addTaskToTasklist(tasklist.getTasklistID(),content).then(new DoneCallback() {
             @Override
             public void onDone(Object result) {
 
@@ -172,10 +207,10 @@ public class AddTasks extends AppCompatActivity {
     private void addTask(String single_task){
         if(!single_task.isEmpty())
         {
-            tasks.add(single_task);
+            tasks.add(0,new Task(single_task));
             adapter.notifyDataSetChanged();
-            noTasksView.setVisibility(View.GONE);
-            rv.setVisibility(View.VISIBLE);
+            showTasks();
+            showSaveBtn();
         }
     }
 
@@ -191,5 +226,18 @@ public class AddTasks extends AppCompatActivity {
     public void showNoTasks() {
         noTasksView.setVisibility(View.VISIBLE);
         rv.setVisibility(View.GONE);
+    }
+
+    public void showTasks() {
+        noTasksView.setVisibility(View.GONE);
+        rv.setVisibility(View.VISIBLE);
+    }
+
+    public void hideSaveBtn() {
+        fab.setVisibility(View.GONE);
+    }
+
+    public void showSaveBtn() {
+        fab.setVisibility(View.VISIBLE);
     }
 }

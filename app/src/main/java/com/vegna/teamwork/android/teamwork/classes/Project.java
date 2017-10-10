@@ -14,7 +14,7 @@ public class Project implements Serializable {
     private String description;
     private String logo;
     private String status;
-    private ArrayList<Task> tasks;
+    private ArrayList<Tasklist> tasklists;
 
     public int getId() {
         return id;
@@ -36,18 +36,18 @@ public class Project implements Serializable {
         return status;
     }
 
-    public void setTasks(ArrayList<Task> tasks){
-        if(this.tasks == null){
-            this.tasks = new ArrayList<>();
+    public void setTasklists(ArrayList<Tasklist> tasklists){
+        if(this.tasklists == null){
+            this.tasklists = new ArrayList<>();
         }
-        this.tasks.clear();
-        this.tasks.addAll(tasks);
+        this.tasklists.clear();
+        this.tasklists.addAll(tasklists);
     }
 
-    public ArrayList<Task> getTasks() {
-        if(tasks == null){
-            tasks = new ArrayList<>();
+    public ArrayList<Tasklist> getTasklists() {
+        if(tasklists == null){
+            tasklists = new ArrayList<>();
         }
-        return tasks;
+        return tasklists;
     }
 }

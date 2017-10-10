@@ -9,18 +9,27 @@ import java.io.Serializable;
 public class Task implements Serializable {
 
     private int id;
-    private String name;
-    private String description;
+    private String content;
+    private boolean fromAPI;
+
+    //called by commmslayer
+    public Task(){
+        fromAPI = true;
+    }
+
+    public Task(String content) {
+        this.content = content;
+        fromAPI = false;
+    }
+
+    public boolean getFromApi() { return fromAPI; }
 
     public int getTasklistID() {
         return id;
     }
 
-    public String getName() {
-        return name;
+    public String getContent() {
+        return content;
     }
 
-    public String getDescription() {
-        return description;
-    }
 }

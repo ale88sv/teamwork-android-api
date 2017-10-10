@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vegna.teamwork.android.teamwork.classes.Project;
 import com.vegna.teamwork.android.teamwork.classes.Task;
+import com.vegna.teamwork.android.teamwork.classes.Tasklist;
 
 import org.jdeferred.DoneCallback;
 import org.jdeferred.FailCallback;
@@ -34,6 +35,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,9 +44,10 @@ public class CommsLayer {
 
     private static final String API_TOKEN = "twp_TEbBXGCnvl2HfvXWfkLUlzx92e3T";
     private static final String BASE_URL = "https://yat.teamwork.com";
-    private static final String GET_PROJECTS = "/projects.json";
+    private static final String GET_PROJECTS = "/projects.json?status=ALL&orderby=lastActivityDate";
     private static final String GET_PROJECT = "/projects/%d.json";
     private static final String GET_PROJECT_TASK_LIST = "/projects/%d/tasklists.json";
+    private static final String GET_TASKS_TASK_LIST = "/tasklists/%d/tasks.json";
     private static final String ADD_TASKS_TO_TASK_LIST = "/tasklists/%d/quickadd.json";
     private static final String USERNAME = "yat@triplespin.com";
     private static final String PASSWORD = "yatyatyat27";
@@ -181,6 +184,8 @@ public class CommsLayer {
                                         JSONArray jsonProjects = jsonResult.getJSONArray("projects");
                                         Type t = new TypeToken<ArrayList<Project>>(){}.getType();
                                         projects= new Gson().fromJson(jsonProjects.toString(), t);
+                                        Collections.reverse(projects);
+
 
                                     }
                                     resolve(projects);
@@ -233,12 +238,12 @@ public class CommsLayer {
                                         project = new Gson().fromJson(jsonProjects.toString(), t);
 
 
-                                        getProjectTasks(id).then(new DoneCallback() {
+                                        getProjectTasksList(id).then(new DoneCallback() {
                                             @Override
                                             public void onDone(Object result) {
                                                 if(result != null){
-                                                    ArrayList<Task> tasks = (ArrayList<Task>) result;
-                                                    project.setTasks(tasks);
+                                                    ArrayList<Tasklist> tasklists = (ArrayList<Tasklist>) result;
+                                                    project.setTasklists(tasklists);
 
                                                     resolve(project);
 
@@ -247,7 +252,7 @@ public class CommsLayer {
                                         }).fail(new FailCallback() {
                                             @Override
                                             public void onFail(Object result) {
-                                                project.setTasks(new ArrayList<Task>());
+                                                project.setTasklists(new ArrayList<Tasklist>());
 
                                                 resolve(project);
                                             }
@@ -278,8 +283,8 @@ public class CommsLayer {
         };
     }
 
-    //return the Project
-    public CustomPromise getProjectTasks(final int id) {
+    //return the Taskslists of theProject
+    public CustomPromise getProjectTasksList(final int id) {
         return new CustomPromise() {
             @Override
             public void execute() {
@@ -294,17 +299,64 @@ public class CommsLayer {
                             JSONObject jsonResult = (JSONObject) result;
 
                             if(jsonResult.has("STATUS") && jsonResult.get("STATUS").toString().toLowerCase().equals("ok")){
-                                ArrayList<Task> tasks = new ArrayList<>();
+                                ArrayList<Tasklist> tasklists = new ArrayList<>();
                                 if(jsonResult.has("tasklists")){
                                     JSONArray jsonProjects = jsonResult.getJSONArray("tasklists");
+                                    Type t = new TypeToken<ArrayList<Tasklist>>(){}.getType();
+                                    tasklists = new Gson().fromJson(jsonProjects.toString(), t);
+
+                                }
+                                resolve(tasklists);
+                            }else
+                            {
+                                Log.e("getTasklists",result.toString());
+                                resolve(null);
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            reject(e);
+                        }
+                    }
+                }).fail(new FailCallback() {
+                    @Override
+                    public void onFail(Object result) {
+                        CustomException e = (CustomException) result;
+                        reject(e);
+                    }
+                });
+            }
+        };
+    }
+
+    //return the Tasks of the Taskslist
+    public CustomPromise getTasklistTasks(final int id) {
+        return new CustomPromise() {
+            @Override
+            public void execute() {
+
+                String path = String.format(GET_TASKS_TASK_LIST,id);
+
+                makeRequestForPath(path, null).then(new DoneCallback() {
+                    @Override
+                    public void onDone(Object result) {
+                        try {
+
+                            JSONObject jsonResult = (JSONObject) result;
+
+                            if(jsonResult.has("STATUS") && jsonResult.get("STATUS").toString().toLowerCase().equals("ok")){
+                                ArrayList<Task> tasks = new ArrayList<>();
+                                if(jsonResult.has("todo-items")){
+                                    JSONArray jsonProjects = jsonResult.getJSONArray("todo-items");
                                     Type t = new TypeToken<ArrayList<Task>>(){}.getType();
-                                    tasks= new Gson().fromJson(jsonProjects.toString(), t);
+                                    tasks = new Gson().fromJson(jsonProjects.toString(), t);
+                                    Collections.reverse(tasks);
 
                                 }
                                 resolve(tasks);
                             }else
                             {
-                                Log.e("getTasks",result.toString());
+                                Log.e("getTasksForTasklist",result.toString());
                                 resolve(null);
                             }
 

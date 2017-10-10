@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,8 +19,9 @@ import com.squareup.picasso.Picasso;
 import com.vegna.teamwork.android.teamwork.R;
 import com.vegna.teamwork.android.teamwork.adapters.RvTasksAdpater;
 import com.vegna.teamwork.android.teamwork.classes.Project;
-import com.vegna.teamwork.android.teamwork.classes.Task;
+import com.vegna.teamwork.android.teamwork.classes.Tasklist;
 import com.vegna.teamwork.android.teamwork.helpers.CommsLayer;
+import com.vegna.teamwork.android.teamwork.helpers.Utils;
 
 import org.jdeferred.DoneCallback;
 
@@ -73,15 +73,15 @@ public class ProjectDescription extends Fragment {
 
         rv.setLayoutManager(llm);
 
-        adapter = new RvTasksAdpater(project.getTasks(),context);
+        adapter = new RvTasksAdpater(project.getTasklists(),context);
         rv.setAdapter(adapter);
 
-        CommsLayer.getComms(context).getProjectTasks(project.getId()).then(new DoneCallback() {
+        CommsLayer.getComms(context).getProjectTasksList(project.getId()).then(new DoneCallback() {
             @Override
             public void onDone(Object result) {
                 if(result != null){
-                    ArrayList<Task> tasks= (ArrayList<Task>) result;
-                    project.setTasks(tasks);
+                    ArrayList<Tasklist> tasklists = (ArrayList<Tasklist>) result;
+                    project.setTasklists(tasklists);
                     adapter.notifyDataSetChanged();
                 }else{
                     Log.e("error","error");
@@ -101,6 +101,9 @@ public class ProjectDescription extends Fragment {
 
     private void updateDetails() {
 
+        int color = Utils.getColor(project.getStatus().toLowerCase(),context);
+
+        status.setBackgroundResource(color);
         status.setText(project.getStatus());
         title.setText(project.getName());
 

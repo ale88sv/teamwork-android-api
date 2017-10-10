@@ -12,8 +12,7 @@ import android.widget.TextView;
 
 import com.vegna.teamwork.android.teamwork.R;
 import com.vegna.teamwork.android.teamwork.activity.AddTasks;
-import com.vegna.teamwork.android.teamwork.classes.Task;
-import com.vegna.teamwork.android.teamwork.fragments.ProjectDescription;
+import com.vegna.teamwork.android.teamwork.classes.Tasklist;
 
 import java.util.List;
 
@@ -23,18 +22,18 @@ import java.util.List;
  */
 
 public class RvTasksAdpater extends RecyclerView.Adapter<RvTasksAdpater.TaskViewHolder>{
-    private List<Task> tasks;
+    private List<Tasklist> tasklists;
     private Context context;
 
-    public RvTasksAdpater(List<Task> tasks, Context context){
-        this.tasks = tasks;
+    public RvTasksAdpater(List<Tasklist> tasklists, Context context){
+        this.tasklists = tasklists;
         this.context = context;
      }
 
     @Override
     public void onBindViewHolder(TaskViewHolder taskViewHolder, int i) {
-        taskViewHolder.title.setText(tasks.get(i).getName());
-        String desc = tasks.get(i).getDescription();
+        taskViewHolder.title.setText(tasklists.get(i).getName());
+        String desc = tasklists.get(i).getDescription();
         //description is optional
         if(desc != null && !desc.isEmpty())
             taskViewHolder.description.setText(desc);
@@ -76,7 +75,7 @@ public class RvTasksAdpater extends RecyclerView.Adapter<RvTasksAdpater.TaskView
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, AddTasks.class);
-                    intent.putExtra("task",tasks.get(getAdapterPosition()));
+                    intent.putExtra("tasklist", tasklists.get(getAdapterPosition()));
                     context.startActivity(intent);
                 }
             });
@@ -88,7 +87,7 @@ public class RvTasksAdpater extends RecyclerView.Adapter<RvTasksAdpater.TaskView
 
     @Override
     public int getItemCount() {
-        return tasks.size();
+        return tasklists.size();
     }
 
 

@@ -11,8 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +18,7 @@ import com.vegna.teamwork.android.teamwork.R;
 import com.vegna.teamwork.android.teamwork.adapters.RVAdpater;
 import com.vegna.teamwork.android.teamwork.classes.Project;
 import com.vegna.teamwork.android.teamwork.helpers.CommsLayer;
+import com.vegna.teamwork.android.teamwork.helpers.Utils;
 
 import org.jdeferred.DoneCallback;
 import org.jdeferred.FailCallback;
@@ -50,10 +49,7 @@ public class ProjectList extends Fragment {
         //need to instantiate here otherwise I will lose the reference when I click on back button
         projects = new ArrayList<>();
         firstTime = true;
-        progress = new ProgressDialog(context);
-        progress.setTitle(getString(R.string.loading));
-        progress.setMessage(getString(R.string.loading_text));
-        progress.setCancelable(false);
+        progress = Utils.createProgressDialog(context);
         progress.show();
 
 

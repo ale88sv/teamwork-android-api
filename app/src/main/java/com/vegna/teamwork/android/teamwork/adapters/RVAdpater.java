@@ -39,8 +39,12 @@ public class RVAdpater extends RecyclerView.Adapter<RVAdpater.ProjectViewHolder>
 
     @Override
     public void onBindViewHolder(ProjectViewHolder projectViewHolder, int i) {
+        int color = Utils.getColor(projects.get(i).getStatus().toLowerCase(),context);
+
         projectViewHolder.status.setText(projects.get(i).getStatus());
+        projectViewHolder.status.setBackgroundResource(color);
         projectViewHolder.title.setText(projects.get(i).getName());
+
 
         String desc = projects.get(i).getDescription();
         //description is optional
@@ -50,6 +54,8 @@ public class RVAdpater extends RecyclerView.Adapter<RVAdpater.ProjectViewHolder>
         //loading image
         if(!projects.get(i).getLogo().isEmpty()){
             Picasso.with(context).load(projects.get(i).getLogo()).error(android.R.drawable.stat_notify_error).placeholder(R.drawable.loading).into(projectViewHolder.logo);
+        }else{
+            projectViewHolder.logo.setImageResource(R.drawable.logo);
         }
     }
 
