@@ -15,7 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vegna.teamwork.android.teamwork.R;
-import com.vegna.teamwork.android.teamwork.adapters.RVAdpater;
+import com.vegna.teamwork.android.teamwork.adapters.RvProjectsAdpater;
 import com.vegna.teamwork.android.teamwork.classes.Project;
 import com.vegna.teamwork.android.teamwork.helpers.CommsLayer;
 import com.vegna.teamwork.android.teamwork.helpers.Utils;
@@ -34,7 +34,7 @@ public class ProjectList extends Fragment {
     private ArrayList<Project> projects;
     private CommsLayer commsLayer;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private RVAdpater adapter;
+    private RvProjectsAdpater adapter;
     private Context context;
     private RecyclerView rv;
     private TextView noResultsView;
@@ -70,7 +70,7 @@ public class ProjectList extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(v.getContext());
         rv.setLayoutManager(llm);
 
-        adapter = new RVAdpater(projects,context,this);
+        adapter = new RvProjectsAdpater(projects,context,this);
         rv.setAdapter(adapter);
 //        rv.setItemAnimator(new ScaleUpAnimator());
 //        rv.getItemAnimator().setAddDuration(1000);

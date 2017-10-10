@@ -13,11 +13,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.vegna.teamwork.android.teamwork.R;
-import com.vegna.teamwork.android.teamwork.adapters.RvTasksAdpater;
+import com.vegna.teamwork.android.teamwork.adapters.RvTasksListAdpater;
 import com.vegna.teamwork.android.teamwork.classes.Project;
 import com.vegna.teamwork.android.teamwork.classes.Tasklist;
 import com.vegna.teamwork.android.teamwork.helpers.CommsLayer;
@@ -34,7 +35,7 @@ public class ProjectDescription extends Fragment {
 
     private CommsLayer commsLayer;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private RvTasksAdpater adapter;
+    private RvTasksListAdpater adapter;
     private Context context;
     private RecyclerView rv;
     private Project project;
@@ -43,6 +44,8 @@ public class ProjectDescription extends Fragment {
     private TextView title;
     private TextView description;
     private ImageView logo;
+    private LinearLayout categoryContainer;
+    private TextView category;
 
 
     @Override
@@ -56,6 +59,10 @@ public class ProjectDescription extends Fragment {
         description = (TextView)v.findViewById(R.id.description);
         //remove the max-lines from the previous layout
         description.setMaxLines(Integer.MAX_VALUE);
+
+        categoryContainer = (LinearLayout)v.findViewById(R.id.category_container);
+        category = (TextView) v.findViewById(R.id.category);
+
 
         logo = (ImageView)v.findViewById(R.id.logo);
 
@@ -73,7 +80,7 @@ public class ProjectDescription extends Fragment {
 
         rv.setLayoutManager(llm);
 
-        adapter = new RvTasksAdpater(project.getTasklists(),context);
+        adapter = new RvTasksListAdpater(project.getTasklists(),context);
         rv.setAdapter(adapter);
 
         CommsLayer.getComms(context).getProjectTasksList(project.getId()).then(new DoneCallback() {
@@ -111,6 +118,12 @@ public class ProjectDescription extends Fragment {
         //description is optional
         if(desc != null)
             description.setText(desc);
+
+
+        if(project.getCategory() != null && project.getCategory().getName() != null && !project.getCategory().getName().isEmpty()){
+            category.setText(project.getCategory().getName());
+        }else
+            categoryContainer.setVisibility(View.GONE);
 
 
 

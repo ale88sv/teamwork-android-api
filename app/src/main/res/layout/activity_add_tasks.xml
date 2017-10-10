@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.vegna.teamwork.android.teamwork.activity.MainActivity">
+    tools:context="com.vegna.teamwork.android.teamwork.activity.MainActivity"
+    >
 
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_margin="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:text="@string/task_list_name"
                     style="@style/title"/>
@@ -29,7 +31,9 @@
                 <TextView
                     android:id="@+id/tasklist_name"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    style="@style/cart_title"
+                    android:layout_marginStart="20dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -38,15 +42,18 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:text="@string/task_list_desc"
                     style="@style/title"/>
 
                 <TextView
                     android:id="@+id/tasklist_desc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:paddingBottom="20dp"
+                    />
             </LinearLayout>
 
 
@@ -65,8 +72,9 @@
             android:id="@+id/task_list"
             android:scrollbars="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"/>
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="20dp"/>
 
     </LinearLayout>
 

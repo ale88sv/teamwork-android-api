@@ -9,10 +9,11 @@
     <string name="task_alert_desc">Insert the description of the task</string>
     <string name="task_list_name">Tasklist:</string>
     <string name="add_task">Add Task</string>
-    <string name="no_tasks">No tasklists</string>
+    <string name="no_tasks">No Tasks</string>
     <string name="task_added">Tasks Added</string>
     <string name="something_wrong">Something went wrong, please retry</string>
     <string name="loading">Loading</string>
     <string name="loading_text">Wait while loading...</string>
     <string name="task_list_desc">Description:</string>
+    <string name="category">Category:</string>
 </resources>

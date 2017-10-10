@@ -21,7 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vegna.teamwork.android.teamwork.R;
-import com.vegna.teamwork.android.teamwork.adapters.RvAddTasksAdpater;
+import com.vegna.teamwork.android.teamwork.adapters.RvSingleTasksAdpater;
 import com.vegna.teamwork.android.teamwork.classes.Task;
 import com.vegna.teamwork.android.teamwork.classes.Tasklist;
 import com.vegna.teamwork.android.teamwork.helpers.CommsLayer;
@@ -37,23 +37,17 @@ public class AddTasks extends AppCompatActivity {
     private ArrayList<Task> tasks;
     private Context context;
     private Tasklist tasklist;
-    private RvAddTasksAdpater adapter;
+    private RvSingleTasksAdpater adapter;
     private RecyclerView rv;
     //deprecated in Android O
     private ProgressDialog progress;
     private TextView noTasksView;
-    private int counter = 0;
     private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_tasks);
-
-        progress = new ProgressDialog(this);
-        progress.setTitle(getString(R.string.loading));
-        progress.setMessage(getString(R.string.loading_text));
-        progress.setCancelable(false);
 
         context = getApplicationContext();
         tasks = new ArrayList<>();
@@ -82,7 +76,7 @@ public class AddTasks extends AppCompatActivity {
         rv.setLayoutManager(llm);
 
 
-        adapter = new RvAddTasksAdpater(tasks,getApplicationContext(),this);
+        adapter = new RvSingleTasksAdpater(tasks,getApplicationContext(),this);
         rv.setAdapter(adapter);
 
 
@@ -200,6 +194,7 @@ public class AddTasks extends AppCompatActivity {
         });
 
         builder.show();
+
     }
 
 

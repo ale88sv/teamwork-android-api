@@ -25,13 +25,13 @@ import java.util.List;
  * Created by alessandro on 05/10/2017.
  */
 
-public class RVAdpater extends RecyclerView.Adapter<RVAdpater.ProjectViewHolder>{
+public class RvProjectsAdpater extends RecyclerView.Adapter<RvProjectsAdpater.ProjectViewHolder>{
     private List<Project> projects;
     private Context context;
     private ProjectList projectListFragment;
 
 
-    public RVAdpater(List<Project> projects,Context context,ProjectList projectList){
+    public RvProjectsAdpater(List<Project> projects, Context context, ProjectList projectList){
         this.projects = projects;
         this.context = context;
         this.projectListFragment = projectList;

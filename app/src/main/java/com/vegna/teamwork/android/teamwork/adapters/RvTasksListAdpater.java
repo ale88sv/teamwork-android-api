@@ -21,11 +21,11 @@ import java.util.List;
  * Created by alessandro on 05/10/2017.
  */
 
-public class RvTasksAdpater extends RecyclerView.Adapter<RvTasksAdpater.TaskViewHolder>{
+public class RvTasksListAdpater extends RecyclerView.Adapter<RvTasksListAdpater.TaskViewHolder>{
     private List<Tasklist> tasklists;
     private Context context;
 
-    public RvTasksAdpater(List<Tasklist> tasklists, Context context){
+    public RvTasksListAdpater(List<Tasklist> tasklists, Context context){
         this.tasklists = tasklists;
         this.context = context;
      }

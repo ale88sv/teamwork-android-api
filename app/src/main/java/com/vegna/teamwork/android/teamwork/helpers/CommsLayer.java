@@ -47,7 +47,7 @@ public class CommsLayer {
     private static final String GET_PROJECTS = "/projects.json?status=ALL&orderby=lastActivityDate";
     private static final String GET_PROJECT = "/projects/%d.json";
     private static final String GET_PROJECT_TASK_LIST = "/projects/%d/tasklists.json";
-    private static final String GET_TASKS_TASK_LIST = "/tasklists/%d/tasks.json";
+    private static final String GET_TASKS_TASK_LIST = "/tasklists/%d/tasks.json?sort=dateadded";
     private static final String ADD_TASKS_TO_TASK_LIST = "/tasklists/%d/quickadd.json";
     private static final String USERNAME = "yat@triplespin.com";
     private static final String PASSWORD = "yatyatyat27";
@@ -350,7 +350,6 @@ public class CommsLayer {
                                     JSONArray jsonProjects = jsonResult.getJSONArray("todo-items");
                                     Type t = new TypeToken<ArrayList<Task>>(){}.getType();
                                     tasks = new Gson().fromJson(jsonProjects.toString(), t);
-                                    Collections.reverse(tasks);
 
                                 }
                                 resolve(tasks);

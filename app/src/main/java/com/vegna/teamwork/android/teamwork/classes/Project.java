@@ -15,6 +15,7 @@ public class Project implements Serializable {
     private String logo;
     private String status;
     private ArrayList<Tasklist> tasklists;
+    private Category category;
 
     public int getId() {
         return id;
@@ -49,5 +50,9 @@ public class Project implements Serializable {
             tasklists = new ArrayList<>();
         }
         return tasklists;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 }

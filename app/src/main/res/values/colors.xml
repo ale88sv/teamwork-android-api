@@ -2,11 +2,12 @@
 <resources>
     <color name="colorPrimary">#3b93f7</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#66d656</color>
+    <color name="colorAccent">#3b93f7</color>
     <color name="archived">#9f9f9f</color>
     <color name="done">#11683e</color>
     <color name="late">#ff4848</color>
     <color name="current">#3b93f7</color>
     <color name="completed">#0c8c00</color>
     <color name="active">#47cc8e</color>
+    <color name="bg">#F5F5F5</color>
 </resources>
