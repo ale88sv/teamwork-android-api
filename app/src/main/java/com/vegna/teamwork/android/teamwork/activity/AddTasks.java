@@ -93,6 +93,12 @@ public class AddTasks extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        updateTasks();
+
+    }
+
+    private void updateTasks(){
+
         CommsLayer.getComms(context).getTasklistTasks(tasklist.getTasklistID()).then(new DoneCallback() {
             @Override
             public void onDone(Object result) {
@@ -116,7 +122,6 @@ public class AddTasks extends AppCompatActivity {
                 progress.dismiss();
             }
         });
-
     }
 
     private void saveTasks() {
@@ -129,8 +134,9 @@ public class AddTasks extends AppCompatActivity {
             public void onDone(Object result) {
 
                 Toast.makeText(context,getString(R.string.task_added),Toast.LENGTH_SHORT).show();
-                dismissProgressBar();
-                finish();
+//                dismissProgressBar();
+//                finish();
+                updateTasks();
 
             }
         }).fail(new FailCallback() {
