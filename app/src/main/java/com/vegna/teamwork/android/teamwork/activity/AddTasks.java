@@ -98,6 +98,8 @@ public class AddTasks extends AppCompatActivity {
     }
 
     private void updateTasks(){
+        //hide fab when update the tasks
+        fab.setVisibility(View.GONE);
 
         CommsLayer.getComms(context).getTasklistTasks(tasklist.getTasklistID()).then(new DoneCallback() {
             @Override
